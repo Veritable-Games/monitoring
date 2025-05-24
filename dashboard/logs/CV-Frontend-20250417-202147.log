@@ -1,0 +1,19 @@
+===== CV-Frontend Status Report =====
+Timestamp: Thu Apr 17 08:21:47 PM PDT 2025
+URL: http://localhost:9003/
+Status: error
+HTTP Status: 000
+Response Time: .006374574s
+Port Status: closed
+Is Running: false
+Error: HTTP Error 000
+
+Detailed connection information:
+*   Trying 127.0.0.1:9003...
+* connect to 127.0.0.1 port 9003 failed: Connection refused
+*   Trying ::1:9003...
+* connect to ::1 port 9003 failed: Connection refused
+* Failed to connect to localhost port 9003 after 0 ms: Connection refused
+* Closing connection 0
+
+================================

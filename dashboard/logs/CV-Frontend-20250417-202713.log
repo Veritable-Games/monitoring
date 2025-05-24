@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constellation Viewer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Montserrat:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* Corner decorative elements */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,0 100,25 100,75 50,100 0,75 0,25' fill='%2314418B'/%3E%3Cpolygon points='50,20 80,35 80,65 50,80 20,65 20,35' fill='none' stroke='%2314418B' stroke-width='0.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        
+        body::before {
+            top: 0;
+            left: 0;
+            transform: rotate(-30deg);
+        }
+        
+        body::after {
+            bottom: 0;
+            right: 0;
+            transform: rotate(30deg);
+        }
+        
+        header {
+            background-color: #14418B;
+            background-image: linear-gradient(to right, #0a2859, #14418B, #2e5cb8);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        /* Orbital decoration */
+        header::after {
+            content: "";
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-top: 0.7rem;
+...
+===== CV-Frontend Status Report =====
+Timestamp: Thu Apr 17 08:27:13 PM PDT 2025
+URL: http://localhost:9003/
+Status: ok
+HTTP Status: 200
+Response Time: .007895775s
+Port Status: open
+Is Running: true
+
+Detailed connection information:
+*   Trying 127.0.0.1:9003...
+* Connected to localhost (127.0.0.1) port 9003 (#0)
+> GET / HTTP/1.1
+> Host: localhost:9003
+> User-Agent: curl/7.81.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< X-Powered-By: Express
+< Accept-Ranges: bytes
+< Cache-Control: public, max-age=0
+< Last-Modified: Thu, 17 Apr 2025 21:56:33 GMT
+< ETag: W/"5072-19645c0ea78"
+< Content-Type: text/html; charset=UTF-8
+< Content-Length: 20594
+< Date: Fri, 18 Apr 2025 03:27:13 GMT
+< Connection: keep-alive
+< Keep-Alive: timeout=5
+< 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Constellation Viewer</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&family=Montserrat:wght@400;500;700&display=swap');
+        
+        body {
+            font-family: 'Raleway', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* Corner decorative elements */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            opacity: 0.1;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpolygon points='50,0 100,25 100,75 50,100 0,75 0,25' fill='%2314418B'/%3E%3Cpolygon points='50,20 80,35 80,65 50,80 20,65 20,35' fill='none' stroke='%2314418B' stroke-width='0.5'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        
+        body::before {
+            top: 0;
+            left: 0;
+            transform: rotate(-30deg);
+        }
+        
+        body::after {
+            bottom: 0;
+            right: 0;
+            transform: rotate(30deg);
+        }
+        
+        header {
+            background-color: #14418B;
+            background-image: linear-gradient(to right, #0a2859, #14418B, #2e5cb8);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath opacity='.5' d='M96 95h4v1h-4v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4h-9v4h-1v-4H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15v-9H0v-1h15V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h9V0h1v15h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9h4v1h-4v9zm-1 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm9-10v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-10 0v-9h-9v9h9zm-9-10h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9zm10 0h9v-9h-9v9z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.3;
+        }
+        
+        /* Orbital decoration */
+        header::after {
+            content: "";
+            position: absolute;
+            top: -100px;
+            right: -100px;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            z-index: 0;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-top: 0.7rem;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .interfaces {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .interfaces {
+                flex-direction: column;
+            }
+        }
+        
+        .interface-card {
+            flex: 1;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            padding: 1.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        
+        .interface-card::before {
+            content: "";
+            position: absolute;
+            height: 6px;
+            left: 0;
+            right: 0;
+            top: 0;
+            background: linear-gradient(to right, #0a2859, #14418B);
+            opacity: 0.7;
+        }
+        
+        .interface-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 15px 30px rgba(20, 65, 139, 0.1);
+        }
+        
+        .interface-card h2 {
+            color: #14418B;
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            position: relative;
+        }
+        
+        .interface-card p {
+            margin-bottom: 1.8rem;
+            color: #555;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #14418B;
+            color: white;
+            padding: 0.8rem 1.6rem;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(20, 65, 139, 0.15);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::after {
+            content: "";
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            background-color: #1a52ad;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(20, 65, 139, 0.25);
+        }
+        
+        .btn:hover::after {
+            left: 100%;
+        }
+        
+        .about-section {
+            margin-top: 3rem;
+            background-color: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.2s;
+        }
+        
+        .close-btn:hover {
+            color: #000;
+        }
+        
+        .instructions-btn {
+            background-color: #f0f0f0;
+            color: #333;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .instructions-btn:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .instructions-btn::before {
+            content: "ℹ️";
+            margin-right: 0.5rem;
+            font-size: 1.1rem;
+        }
+        
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Veritable Games</h1>
+        <p class="subtitle">Data Navigation Reimagined</p>
+    </header>
+    
+    <!-- Background decorative patterns -->
+    <div style="position: fixed; left: 20px; top: 40%; width: 100px; height: 100px; opacity: 0.04; z-index: -1; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'20\' cy=\'20\' r=\'3\' fill=\'%23333\'/%3E%3Ccircle cx=\'50\' cy=\'20\' r=\'3\' fill=\'%23333\'/%3E%3Ccircle cx=\'80\' cy=\'20\' r=\'3\' fill=\'%23333\'/%3E%3Ccircle cx=\'20\' cy=\'50\' r=\'3\' fill=\'%23333\'/%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'3\' fill=\'%23333\'/%3E%3Ccircle cx=\'80\' cy=\'50\' r=\'3\' fill=\'%23333\'/%3E%3Ccircle cx=\'20\' cy=\'80\' r=\'3\' fill=\'%23333\'/%3E%3Ccircle cx=\'50\' cy=\'80\' r=\'3\' fill=\'%23333\'/%3E%3Ccircle cx=\'80\' cy=\'80\' r=\'3\' fill=\'%23333\'/%3E%3C/svg%3E'); transform: rotate(15deg);"></div>
+    <div style="position: fixed; right: 20px; top: 60%; width: 150px; height: 150px; opacity: 0.03; z-index: -1; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Cline x1=\'20\' y1=\'20\' x2=\'80\' y2=\'80\' stroke=\'%2314418B\' stroke-width=\'1\'/%3E%3Cline x1=\'80\' y1=\'20\' x2=\'20\' y2=\'80\' stroke=\'%2314418B\' stroke-width=\'1\'/%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'30\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'1\'/%3E%3C/svg%3E');"></div>
+
+    <div class="container">
+        <div class="interfaces" style="position: relative;">
+            <div class="interface-card">
+                <h2>Basic Interface</h2>
+                <p>A simple text-based interface for browsing and viewing notebook files with directory navigation and file selection.</p>
+                <a href="basic.html" class="btn">Open Basic Interface</a>
+            </div>
+            
+            
+            <div class="interface-card">
+                <h2>Enhanced Wiki</h2>
+                <p>Advanced wiki system with improved UI, responsive design, and file browsing capabilities.</p>
+                <a href="enhanced-wiki.html" class="btn">Open Enhanced Wiki</a>
+            </div>
+            
+            <div class="interface-card" style="position: relative;">
+                <span id="infoBtn" style="position: absolute; top: 15px; right: 15px; width: 25px; height: 25px; background: #14418B; color: white; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; font-weight: bold; font-size: 18px;">?</span>
+                <h2>3D Viewer</h2>
+                <p>Interactive 3D visualization of notebook files with spatial organization and visual navigation.</p>
+                <a href="http://localhost:8081" target="_blank" class="btn">Open 3D Viewer</a>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+    
+    <div class="container" style="margin-top: 30px; position: relative;">
+        <!-- Left side decoration -->
+        <div style="position: absolute; left: -40px; top: 50px; width: 80px; height: 80px; opacity: 0.2; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'1\'/%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'30\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'0.7\'/%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'15\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'0.5\'/%3E%3C/svg%3E');"></div>
+        
+        <!-- Right side decoration -->
+        <div style="position: absolute; right: -30px; top: 150px; width: 60px; height: 60px; opacity: 0.2; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Cpolygon points=\'50,10 90,30 90,70 50,90 10,70 10,30\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'1\'/%3E%3C/svg%3E');"></div>
+        
+        <div style="background-color: #f8f6f0; padding: 25px; border-radius: 8px; text-align: center; border: 1px solid #e0d8c0; overflow: hidden; position: relative;">
+            <!-- Mockup visualization -->
+            <div style="margin: 0 auto; width: 100%; max-width: 600px; height: 250px; position: relative; margin-bottom: 20px;">
+                <!-- Dodecahedron mockup -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 180px; height: 180px; background-color: #14418B; opacity: 0.85; border-radius: 15px; transform-style: preserve-3d; transform: translate(-50%, -50%) rotateX(20deg) rotateY(45deg);">
+                </div>
+                
+                <!-- Orbital circles -->
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; border: 1px solid rgba(20, 65, 139, 0.3); border-radius: 50%;"></div>
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; height: 380px; border: 1px solid rgba(20, 65, 139, 0.15); border-radius: 50%;"></div>
+                
+                <!-- Connection lines -->
+                <div style="position: absolute; top: 30%; left: 35%; width: 100px; height: 1px; background-color: rgba(20, 65, 139, 0.4); transform: rotate(25deg);"></div>
+                <div style="position: absolute; top: 60%; left: 60%; width: 80px; height: 1px; background-color: rgba(20, 65, 139, 0.4); transform: rotate(-15deg);"></div>
+                <div style="position: absolute; top: 45%; left: 25%; width: 90px; height: 1px; background-color: rgba(20, 65, 139, 0.4); transform: rotate(10deg);"></div>
+                
+                <!-- Symbol nodes -->
+                <div style="position: absolute; top: 25%; left: 28%; width: 30px; height: 30px; background-color: #f5f5f5; border: 2px solid #14418B; border-radius: 50%;"></div>
+                <div style="position: absolute; top: 65%; left: 65%; width: 25px; height: 25px; background-color: #f5f5f5; border: 2px solid #14418B; border-radius: 50%;"></div>
+                <div style="position: absolute; top: 40%; left: 18%; width: 20px; height: 20px; background-color: #f5f5f5; border: 2px solid #14418B; border-radius: 50%;"></div>
+            </div>
+            
+            <div style="margin-top: 10px; display: flex; justify-content: center; gap: 20px;">
+                <a href="enhanced-wiki.html" class="btn" style="background-color: #555;">Start Enhanced Wiki</a>
+                <a href="http://localhost:8081" target="_blank" class="btn">Enter 3D Space</a>
+            </div>
+        </div>
+    </div>
+    
+    <footer style="position: relative; overflow: hidden; background: linear-gradient(to right, #0a2859, #14418B, #2e5cb8); padding: 25px; box-shadow: 0 -3px 10px rgba(0,0,0,0.07);">
+        <!-- Footer decorative elements -->
+        <div style="position: absolute; left: 5%; bottom: 0; width: 40px; height: 40px; opacity: 0.2; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Cpolygon points=\'50,0 95,25 95,75 50,100 5,75 5,25\' fill=\'none\' stroke=\'white\' stroke-width=\'1\'/%3E%3C/svg%3E');"></div>
+        <div style="position: absolute; right: 5%; bottom: 0; width: 40px; height: 40px; opacity: 0.2; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Cpolygon points=\'50,0 95,25 95,75 50,100 5,75 5,25\' fill=\'none\' stroke=\'white\' stroke-width=\'1\'/%3E%3C/svg%3E');"></div>
+        
+        <!-- Grid patterns -->
+        <div style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'20\' height=\'20\' viewBox=\'0 0 20 20\'%3E%3Ccircle cx=\'10\' cy=\'10\' r=\'0.5\' fill=\'%23ffffff\' fill-opacity=\'0.1\'/%3E%3C/svg%3E'); opacity: 0.3;"></div>
+        
+        <p style="margin: 0; text-align: center; font-weight: 400; letter-spacing: 1px; position: relative; z-index: 1; font-family: 'Montserrat', sans-serif;">Veritable Games &copy; 2025 | <span style="font-weight: 300;">Data Navigation Reimagined</span></p>
+    </footer>
+    
+    <!-- Instructions/Info Modal -->
+    <div id="infoModal" class="modal">
+        <div class="modal-content" style="position: relative; overflow: hidden;">
+            <!-- Modal decoration -->
+            <div style="position: absolute; right: -20px; top: -20px; width: 120px; height: 120px; opacity: 0.05; background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'45\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'1\'/%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'35\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'0.8\'/%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'25\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'0.6\'/%3E%3Ccircle cx=\'50\' cy=\'50\' r=\'15\' fill=\'none\' stroke=\'%2314418B\' stroke-width=\'0.4\'/%3E%3C/svg%3E'); z-index: 0;"></div>
+            
+            <span class="close-btn" id="closeInfoBtn" style="z-index: 1;">&times;</span>
+            <h2>Data Visualization</h2>
+            <p>Browse and explore notebook files with multiple interfaces:</p>
+            
+            <h3>Basic Interface</h3>
+            <ul>
+                <li>Select directory from dropdown</li>
+                <li>Click files to view contents</li>
+                <li>Use Refresh to update listings</li>
+            </ul>
+            
+            <h3>Enhanced Wiki</h3>
+            <ul>
+                <li>Modern UI with dark/light themes</li>
+                <li>Multiple view modes (compact, normal, reading)</li>
+                <li>Markdown support with live preview</li>
+                <li>Built-in search functionality</li>
+                <li>Improved notebook browsing</li>
+            </ul>
+            
+            <h3>3D Controls</h3>
+            <ul>
+                <li><strong>WASD keys:</strong> Rotate object</li>
+                <li><strong>Right-click + drag:</strong> Orbit camera</li>
+                <li><strong>Double-click:</strong> Toggle orbit mode</li>
+                <li><strong>Mouse wheel:</strong> Zoom in/out</li>
+                <li><strong>F or Space:</strong> Center view</li>
+                <li><strong>R key:</strong> Reset view</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const infoModal = document.getElementById('infoModal');
+        const infoBtn = document.getElementById('infoBtn');
+        const closeInfoBtn = document.getElementById('closeInfoBtn');
+        
+        infoBtn.onclick = function() {
+            infoModal.style.display = "block";
+        }
+        
+        closeInfoBtn.onclick = function() {
+            infoModal.style.display = "none";
+        }
+        
+        // Close when clicking outside the modal
+        window.onclick = function(event) {
+            if (event.target == in* Connection #0 to host localhost left intact
+foModal) {
+                infoModal.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
+
+================================

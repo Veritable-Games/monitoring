@@ -1,0 +1,30 @@
+...
+===== PS2-Forum Status Report =====
+Timestamp: Thu Apr 17 08:26:01 PM PDT 2025
+URL: http://localhost:8000/
+Status: ok
+HTTP Status: 200
+Response Time: .067201649s
+Port Status: closed
+Is Running: true
+
+Detailed connection information:
+*   Trying 127.0.0.1:8000...
+* Connected to localhost (127.0.0.1) port 8000 (#0)
+> GET / HTTP/1.1
+> Host: localhost:8000
+> User-Agent: curl/7.81.0
+> Accept: */*
+> 
+* Mark bundle as not supporting multiuse
+< HTTP/1.1 200 OK
+< Date: Fri, 18 Apr 2025 03:26:01 GMT
+< Server: Apache/2.4.62 (Debian)
+< X-Powered-By: PHP/8.2.27
+< Link: <http://localhost:8000/index.php?rest_route=/>; rel="https://api.w.org/"
+< Content-Length: 0
+< Content-Type: text/html; charset=UTF-8
+< 
+* Connection #0 to host localhost left intact
+
+================================

@@ -1,0 +1,19 @@
+===== CV-Backend Status Report =====
+Timestamp: Thu Apr 17 08:21:47 PM PDT 2025
+URL: http://localhost:3002/api
+Status: error
+HTTP Status: 000
+Response Time: .009722218s
+Port Status: closed
+Is Running: false
+Error: HTTP Error 000
+
+Detailed connection information:
+*   Trying 127.0.0.1:3002...
+* connect to 127.0.0.1 port 3002 failed: Connection refused
+*   Trying ::1:3002...
+* connect to ::1 port 3002 failed: Connection refused
+* Failed to connect to localhost port 3002 after 0 ms: Connection refused
+* Closing connection 0
+
+================================
